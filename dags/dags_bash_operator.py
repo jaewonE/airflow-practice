@@ -18,7 +18,7 @@ params: DAG 내부에서 사용할 파라미터들.
 
 
 with DAG(
-    dag_id="dags_bash_operator",
+    dag_id="my_dags_bash_operator",
     schedule="0 0 * * *",
     start_date=pendulum.datetime(2023, 3, 1, tz="Asia/Seoul"),
     catchup=False,
@@ -33,7 +33,6 @@ with DAG(
     t4 = EmptyOperator(task_id="Empty_t4")
     t5 = EmptyOperator(task_id="Empty_t5")
     t6 = EmptyOperator(task_id="Empty_t6")
-    t7 = EmptyOperator(task_id="Empty_t7")
     final_task = BashOperator(
         task_id="final_task",
         bash_command="echo $HOSTNAME; echo good",
@@ -41,6 +40,5 @@ with DAG(
     )
 
     t1 >> [t2, t3] >> t4
-    t5 >> [t4, t7]
-    [t4, t5] >> t6
-    [t6, t7] >> final_task
+    t5 >> t4
+    [t4, t6] >> final_task
